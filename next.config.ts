@@ -4,6 +4,12 @@ import { withSentryConfig } from '@sentry/nextjs';
 // Define the base Next.js configuration
 const baseConfig: NextConfig = {
   output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
+  experimental: {
+    // TypeScript 7's native (Go) compiler doesn't expose the Program API
+    // Next.js normally uses for its build-time type check — this routes
+    // that check through the `tsc` CLI instead.
+    useTypeScriptCli: true
+  },
   images: {
     remotePatterns: [
       {
