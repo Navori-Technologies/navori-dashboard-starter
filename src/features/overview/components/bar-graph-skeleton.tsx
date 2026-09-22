@@ -1,6 +1,10 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
+// Fixed, varied heights so the skeleton doesn't jump on every re-render (Math.random
+// during render is impure and would also mismatch between server and client on hydration).
+const BAR_HEIGHTS = [42, 78, 55, 91, 34, 67, 88, 48, 72, 60, 95, 39];
+
 export function BarGraphSkeleton() {
   return (
     <Card>
@@ -13,12 +17,12 @@ export function BarGraphSkeleton() {
       </CardHeader>
       <CardContent>
         <div className='flex aspect-auto h-[280px] w-full items-end justify-around gap-2 pt-8'>
-          {Array.from({ length: 12 }).map((_, i) => (
+          {BAR_HEIGHTS.map((height, i) => (
             <Skeleton
               key={i}
               className='w-full rounded-t-sm'
               style={{
-                height: `${Math.max(20, Math.random() * 100)}%`
+                height: `${height}%`
               }}
             />
           ))}

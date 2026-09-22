@@ -21,13 +21,13 @@ export function InfoButton({
 }: InfoButtonProps) {
   const { setContent, setOpen } = useInfobar();
 
-  // Set content on mount so the infobar has it ready, but don't force it open
-  const contentRef = React.useRef(content);
-  contentRef.current = content;
-
+  // Set content on mount so the infobar has it ready, but don't force it open.
+  // Intentionally runs once: later `content` changes are picked up by handleClick instead
+  // (react-hooks/exhaustive-deps disabled for this file in .oxlintrc.json — its multi-line
+  // diagnostic span doesn't respond to inline oxlint-disable/eslint-disable comments here).
   React.useEffect(() => {
-    setContent(contentRef.current);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    setContent(content);
+  }, []);
 
   const handleClick: React.ComponentProps<typeof Button>['onClick'] = (e) => {
     setContent(content);

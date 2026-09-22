@@ -1005,6 +1005,7 @@ function KanbanOverlay(props: KanbanOverlayProps) {
 
   const [mounted, setMounted] = React.useState(false);
 
+  // oxlint-disable-next-line react/set-state-in-effect -- client-only mount guard so document.body isn't touched during SSR
   React.useLayoutEffect(() => setMounted(true), []);
 
   const container = containerProp ?? (mounted ? globalThis.document?.body : null);

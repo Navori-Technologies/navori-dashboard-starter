@@ -25,11 +25,11 @@ export function Messenger() {
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const shouldReduceMotion = useReducedMotion();
   const replyTimeoutRef = useRef<number | null>(null);
-  const selectedRef = useRef(selectedConversationId);
 
   useEffect(() => {
-    selectedRef.current = selectedConversationId;
+    // oxlint-disable-next-line react/set-state-in-effect -- resets the draft attachments when the user switches conversations
     setAttachments([]);
+    // oxlint-disable-next-line react/exhaustive-effect-dependencies -- selectedConversationId is a trigger-only dependency, not read in the body
   }, [selectedConversationId]);
 
   useEffect(() => {

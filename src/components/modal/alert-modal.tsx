@@ -26,6 +26,7 @@ export function AlertModal({
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // oxlint-disable-next-line react/set-state-in-effect -- client-only mount guard so the portal-backed Modal never renders during SSR
     setIsMounted(true);
   }, []);
 

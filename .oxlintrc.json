@@ -47,6 +47,13 @@
   },
   "overrides": [
     {
+      "files": ["src/components/ui/info-button.tsx"],
+      "rules": {
+        "react-hooks/exhaustive-deps": "off",
+        "react/exhaustive-effect-dependencies": "off"
+      }
+    },
+    {
       "files": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
       "rules": {
         "constructor-super": "off",

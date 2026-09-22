@@ -15,6 +15,7 @@ export default function RenderResults() {
   return (
     <KBarResults
       items={results}
+      // oxlint-disable-next-line react/no-unstable-nested-components -- kbar's onRender is a per-item render-prop callback, not a mounted component type
       onRender={({ item, active }) =>
         typeof item === 'string' ? (
           <div className='text-muted-foreground px-4 pt-3 pb-1 text-xs font-medium tracking-wider uppercase'>

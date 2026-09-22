@@ -113,9 +113,11 @@ function Calendar({
         ...classNames
       }}
       components={{
+        // oxlint-disable-next-line react/no-unstable-nested-components -- shadcn/react-day-picker `components` slots, DayButton needs Calendar's `locale` prop via closure
         Root: ({ className, rootRef, ...props }) => {
           return <div data-slot='calendar' ref={rootRef} className={cn(className)} {...props} />;
         },
+        // oxlint-disable-next-line react/no-unstable-nested-components -- shadcn/react-day-picker `components` slot
         Chevron: ({ className, orientation, ...props }) => {
           if (orientation === 'left') {
             return <IconChevronLeft className={cn('size-4', className)} {...props} />;
@@ -127,7 +129,9 @@ function Calendar({
 
           return <IconChevronDown className={cn('size-4', className)} {...props} />;
         },
+        // oxlint-disable-next-line react/no-unstable-nested-components -- closes over Calendar's `locale` prop, react-day-picker's DayButtonProps has no slot for it
         DayButton: ({ ...props }) => <CalendarDayButton locale={locale} {...props} />,
+        // oxlint-disable-next-line react/no-unstable-nested-components -- shadcn/react-day-picker `components` slot
         WeekNumber: ({ children, ...props }) => {
           return (
             <td {...props}>

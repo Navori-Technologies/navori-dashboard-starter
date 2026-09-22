@@ -93,6 +93,7 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return;
+    // oxlint-disable-next-line react/set-state-in-effect -- syncs initial scroll state from embla's imperative API before its first 'select'/'reInit' event fires
     onSelect(api);
     api.on('reInit', onSelect);
     api.on('select', onSelect);

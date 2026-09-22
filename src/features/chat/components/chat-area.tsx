@@ -44,6 +44,7 @@ export function ChatArea({
     } else {
       scrollToBottom();
     }
+    // oxlint-disable-next-line react/exhaustive-effect-dependencies -- conversation.messages/id are trigger-only: re-scroll on new messages or conversation switch
   }, [conversation.messages, conversation.id, shouldReduceMotion]);
 
   useEffect(() => {
