@@ -208,7 +208,7 @@ Yes. The template is built on Next.js 16 (App Router), React 19, and Tailwind CS
 Yes. Bun is preferred, but npm works too, and the repo even ships both Node.js and Bun Dockerfiles for deployment.
 
 **Does it work with AI coding assistants?**
-Yes. The repo ships AGENTS.md and CLAUDE.md with the project's conventions, plus a bundled Claude Code skill (`.claude/skills/kiranism-shadcn-dashboard`) that teaches agents how to add pages, tables, forms, and navigation the template way. Works with Claude Code, Cursor, and any tool that reads AGENTS.md.
+Yes. The repo ships a bundled Claude Code skill (`.claude/skills/kiranism-shadcn-dashboard`, mirrored at `.agents/skills/kiranism-shadcn-dashboard`) that teaches agents how to add pages, tables, forms, and navigation the template way. Works with Claude Code, Cursor, and any tool that reads the `.agents`/`.claude` skills convention.
 
 **What data fetching pattern does it use?**
 TanStack React Query with the official SSR pattern: `prefetchQuery` on the server, `HydrationBoundary` with `dehydrate` for hydration, and `useSuspenseQuery` on the client, plus nuqs for URL-synced search-param state. Mutations invalidate the cache on success.
