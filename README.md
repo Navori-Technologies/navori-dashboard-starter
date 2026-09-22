@@ -1,23 +1,17 @@
-<h1 align="center">Admin Dashboard Template with Next.js &amp; Shadcn UI</h1>
+<h1 align="center">Navori Dashboard Starter</h1>
 
-<div align="center">Free, open source admin dashboard starter built with Next.js 16, shadcn/ui, Tailwind CSS, and TypeScript</div>
-
-<div align="center">
-  <a href="https://dub.sh/shadcn-dashboard"><strong>View Demo</strong></a>
-</div>
+<div align="center">Navori's opinionated admin dashboard starter — Next.js 16, shadcn/ui, Tailwind CSS, TypeScript, and direct session auth against a Keystone 6 GraphQL backend</div>
 
 <br />
 
 <div align="center">
-  <img src="/public/shadcn-dashboard.png" alt="Shadcn Dashboard Cover" style="max-width: 100%; border-radius: 8px;" />
+  <img src="/public/shadcn-dashboard.png" alt="Dashboard screenshot" style="max-width: 100%; border-radius: 8px;" />
 </div>
 
 <br />
 
 <p align="center">
-  <a href="https://github.com/Kiranism/next-shadcn-dashboard-starter/stargazers"><img src="https://img.shields.io/github/stars/Kiranism/next-shadcn-dashboard-starter?style=social" alt="GitHub stars" /></a>
-  <a href="https://github.com/Kiranism/next-shadcn-dashboard-starter/network/members"><img src="https://img.shields.io/github/forks/Kiranism/next-shadcn-dashboard-starter?style=social" alt="Forks" /></a>
-  <a href="https://github.com/Kiranism/next-shadcn-dashboard-starter/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Kiranism/next-shadcn-dashboard-starter" alt="MIT License" /></a>
+  <a href="https://github.com/navori/dashboard-starter/blob/main/LICENSE"><img src="https://img.shields.io/github/license/navori/dashboard-starter" alt="MIT License" /></a>
   <img src="https://img.shields.io/badge/Next.js-16-black" alt="Next.js" />
 </p>
 
@@ -87,19 +81,19 @@ A few things you can build with it:
 
 | Page                                                                                                                                                                  | Notes                                                                                                                                                                                |
 | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Sign in                                                                                                                                                                | Email/password login against Keystone's `authenticateUserWithPassword`, via a TanStack Form. |
-| [Dashboard Overview](https://shadcn-dashboard.kiranism.dev/dashboard)                                                                                                 | Cards and Recharts graphs. Parallel routes give each section its own loading and error state.                                                                                       |
-| [Product List (Table)](https://shadcn-dashboard.kiranism.dev/dashboard/product)                                                                                       | TanStack Table plus React Query (server prefetch, client cache) with nuqs URL state for search, filter, and pagination. `shallow: true` keeps interactions on the client.           |
-| [Create Product Form](https://shadcn-dashboard.kiranism.dev/dashboard/product/new)                                                                                    | TanStack Form and Zod with `useMutation` for create and update. Cache is invalidated on success.                                                                                    |
-| [Users (Table)](https://shadcn-dashboard.kiranism.dev/dashboard/users)                                                                                                | Same setup as Products: React Query with nuqs, server prefetch, and client-side pagination and filtering.                                                                           |
-| [React Query Demo](https://shadcn-dashboard.kiranism.dev/dashboard/react-query)                                                                                       | A Pokemon API example showing the server prefetch, `HydrationBoundary`, and `useSuspenseQuery` pattern with client-side cache. |
-| [Profile](https://shadcn-dashboard.kiranism.dev/dashboard/profile)                                                                                                   | Reads the current Keystone session (name, email, role) — extend it to hit your own update-profile mutation. |
-| [Kanban Board](https://shadcn-dashboard.kiranism.dev/dashboard/kanban)                                                                                                | Drag-and-drop task board built with dnd-kit and Zustand. Column sorting, priority badges, assignees, and due dates. |
-| [Chat](https://shadcn-dashboard.kiranism.dev/dashboard/chat)                                                                                                          | Messaging UI with a conversation list, message bubbles, quick replies, attachments, and an auto-reply demo. Multi-panel layout that works on mobile. |
-| [AI Chat](https://shadcn-dashboard.kiranism.dev/dashboard/ai-chat)                                                                                                    | Scripted AI chat that streams a predefined conversation through the real `useChat` lifecycle — no model, API route, or key. Built with the shadcn chat components (MessageScroller, Bubble, Marker). |
-| [Notifications](https://shadcn-dashboard.kiranism.dev/dashboard/notifications)                                                                                        | Notification center with a header badge, popover preview, and a full page with All / Unread / Read tabs. Includes mark-as-read and mark-all-as-read. |
-| [Not Found](https://shadcn-dashboard.kiranism.dev/dashboard/notfound)                                                                                                 | A root-level not-found page.                                                                                                                                                        |
-| [Global Error](https://sentry.io/for/nextjs/?utm_source=github&utm_medium=paid-community&utm_campaign=general-fy26q2-nextjs&utm_content=github-banner-project-tryfree) | A shared error page wired to Sentry for logging, reports, and session replay. |
+| Sign in                | Email/password login against Keystone's `authenticateUserWithPassword`, via a TanStack Form. |
+| Dashboard Overview     | Cards and Recharts graphs. Parallel routes give each section its own loading and error state.                                                                                       |
+| Product List (Table)   | TanStack Table plus React Query (server prefetch, client cache) with nuqs URL state for search, filter, and pagination. `shallow: true` keeps interactions on the client.           |
+| Create Product Form    | TanStack Form and Zod with `useMutation` for create and update. Cache is invalidated on success.                                                                                    |
+| Users (Table)          | Same setup as Products: React Query with nuqs, server prefetch, and client-side pagination and filtering.                                                                           |
+| React Query Demo       | A Pokemon API example showing the server prefetch, `HydrationBoundary`, and `useSuspenseQuery` pattern with client-side cache. |
+| Profile                | Reads the current Keystone session (name, email, role) — extend it to hit your own update-profile mutation. |
+| Kanban Board           | Drag-and-drop task board built with dnd-kit and Zustand. Column sorting, priority badges, assignees, and due dates. |
+| Chat                   | Messaging UI with a conversation list, message bubbles, quick replies, attachments, and an auto-reply demo. Multi-panel layout that works on mobile. |
+| AI Chat                | Scripted AI chat that streams a predefined conversation through the real `useChat` lifecycle — no model, API route, or key. Built with the shadcn chat components (MessageScroller, Bubble, Marker). |
+| Notifications          | Notification center with a header badge, popover preview, and a full page with All / Unread / Read tabs. Includes mark-as-read and mark-all-as-read. |
+| Not Found              | A root-level not-found page.                                                                                                                                                        |
+| Global Error           | A shared error page wired to Sentry for logging, reports, and session replay. |
 
 ## Folder Structure
 
@@ -154,7 +148,7 @@ src/
 Clone the repo:
 
 ```
-git clone https://github.com/Kiranism/next-shadcn-dashboard-starter.git
+git clone https://github.com/navori/dashboard-starter.git
 ```
 
 - `bun install`
@@ -168,7 +162,7 @@ See `env.example.txt` for the variables you need. They cover authentication and 
 
 ##### Keystone auth setup
 
-For setting up auth against your Keystone GraphQL backend, see [keystone_auth.md](./docs/keystone_auth.md).
+For setting up auth against your Keystone GraphQL backend, see [keystone_auth.md](./docs/keystone_auth.md). That doc also covers `bun run codegen`, wired up but not run against a real schema yet.
 
 The app should now be running at http://localhost:3000.
 
@@ -226,11 +220,9 @@ Deploy to Vercel out of the box, or use the included Docker setups: a Node.js Do
 
 Deploy to Vercel out of the box, or use the included Docker setups: a Node.js Dockerfile and a Bun Dockerfile, both using Next.js standalone output mode. Full guide: [docs/deployment.md](./docs/deployment.md).
 
-### Support
+### Credits
 
-If this template saved you some time, a star is appreciated. You can also [buy me a coffee](https://buymeacoffee.com/kir4n) if you'd like.
-
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=flat-square&logo=buymeacoffee)](https://buymeacoffee.com/kir4n)
+This is Navori's opinionated fork of [Kiranism/next-shadcn-dashboard-starter](https://github.com/Kiranism/next-shadcn-dashboard-starter), the free, open source Next.js + shadcn/ui admin dashboard starter this template was originally built from. It's still MIT-licensed (see [LICENSE](./LICENSE)) — go star the original if this saved you time.
 
 <!--
 

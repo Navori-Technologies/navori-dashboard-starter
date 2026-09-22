@@ -38,6 +38,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# GraphQL Codegen output (generated against your Keystone schema — see codegen.ts)
+/src/gql/
+
 .idea/
 # clerk configuration (can include secrets)
 /.clerk/

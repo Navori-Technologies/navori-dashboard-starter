@@ -10,7 +10,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
-  title: 'Next Shadcn Dashboard Starter',
+  title: 'Navori Dashboard Starter',
   description: 'Basic dashboard with Next.js and Shadcn',
   robots: {
     index: false,

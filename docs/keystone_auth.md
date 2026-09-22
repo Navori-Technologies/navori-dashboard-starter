@@ -56,3 +56,15 @@ KEYSTONE_SESSION_COOKIE_NAME=
 ## Role-based navigation
 
 `src/config/nav-config.ts` items can gate on `access: { role: 'admin' }`, matching against Keystone's `authenticatedItem.role`. See `docs/nav-rbac.md`. This is a UX-only check — real authorization always happens in Keystone's `access/*` functions.
+
+## GraphQL Codegen (setup only — nothing generated yet)
+
+`codegen.ts` at the repo root is wired up with [`@graphql-codegen/cli`](https://the-guild.dev/graphql/codegen) and the `client` preset (typed document nodes — no separate hooks plugin needed, they drop straight into Apollo's `useQuery`/`useMutation`). It isn't run against a real schema yet, since this repo doesn't ship a live Keystone backend to introspect.
+
+Once your Keystone server is running:
+
+1. Point `KEYSTONE_GRAPHQL_URL` (or `NEXT_PUBLIC_KEYSTONE_GRAPHQL_URL`) in `.env.local` at it.
+2. Run `bun run codegen` (or `bun run codegen:watch` while developing) — this writes typed documents to `src/gql/` (gitignored — it's a build artifact of your schema, not source).
+3. Replace the hand-written documents in `src/graphql/auth.ts` with generated ones, and write new features' queries/mutations the same way instead of hand-typing GraphQL documents.
+
+If you're bringing over an existing GraphQL setup (e.g. from another Keystone-backed project), you likely already have working `codegen.ts` plugins/config to port in — this file is a minimal starting point, not a fixed contract.
