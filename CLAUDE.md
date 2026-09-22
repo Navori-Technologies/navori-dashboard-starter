@@ -7,8 +7,8 @@ This is a Next.js 16 + shadcn/ui admin dashboard starter kit.
 - **[AGENTS.md](./AGENTS.md)** — Full project overview, tech stack, structure, conventions, data fetching patterns, deployment
 - **[docs/forms.md](./docs/forms.md)** — Form system: TanStack Form + Zod, composable fields, validation, multi-step, sheet/dialog forms
 - **[docs/themes.md](./docs/themes.md)** — Theme system: OKLCH colors, adding themes, font config
-- **[docs/nav-rbac.md](./docs/nav-rbac.md)** — Navigation RBAC: access control, Clerk integration
-- **[docs/clerk_setup.md](./docs/clerk_setup.md)** — Clerk auth setup: organizations, billing, environment variables
+- **[docs/nav-rbac.md](./docs/nav-rbac.md)** — Navigation RBAC: role-based access control
+- **[docs/keystone_auth.md](./docs/keystone_auth.md)** — Auth setup: Keystone session auth, Apollo Client, environment variables
 - **[docs/deployment.md](./docs/deployment.md)** — Deployment: Vercel, production environment variables, Docker
 
 ## Critical Conventions
@@ -19,4 +19,5 @@ This is a Next.js 16 + shadcn/ui admin dashboard starter kit.
 - **Icons** — only import from `@/components/icons`, never from `@tabler/icons-react` directly
 - **Forms** — `useAppForm` from `@/lib/form` (TanStack `createFormHook`) + `form.AppField` rendering the field components in `@/components/forms/fields` (`field.TextField`, `field.SelectField`, …); each component is the shadcn TanStack Form doc anatomy; raw `form.Field` for one-off custom fields; form-level Zod `onSubmit` validators
 - **Page headers** — use `PageContainer` props (`pageTitle`, `pageDescription`, `pageHeaderAction`), never import `<Heading>` manually
+- **Auth** — session auth against Keystone's GraphQL API via Apollo Client, not a third-party identity provider; `getSession()` (RSC) / `useSession()` (Client Components) read `authenticatedItem`, same users as Keystone Admin UI and the RN app
 - **Formatting** — single quotes, JSX single quotes, no trailing comma, 2-space indent

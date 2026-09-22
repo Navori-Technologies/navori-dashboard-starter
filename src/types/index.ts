@@ -1,11 +1,8 @@
 import { Icons } from '@/components/icons';
 
 export interface PermissionCheck {
-  permission?: string;
-  plan?: string;
-  feature?: string;
+  /** Matches against the signed-in user's Keystone `role` field. */
   role?: string;
-  requireOrg?: boolean;
 }
 
 export interface NavItem {

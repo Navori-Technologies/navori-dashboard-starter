@@ -12,7 +12,7 @@ This file provides essential information for AI coding agents working on this pr
 - **Language**: TypeScript 5.7
 - **Styling**: Tailwind CSS v4
 - **UI Components**: shadcn/ui (New York style)
-- **Authentication**: Clerk (with Organizations/Billing support)
+- **Authentication**: Direct session auth against a Keystone 6 GraphQL backend (Apollo Client)
 - **Error Tracking**: Sentry
 - **Charts**: Recharts
 - **Containerization**: Docker (Node.js & Bun Dockerfiles)
@@ -53,10 +53,13 @@ The project follows a feature-based folder structure designed for scalability in
 
 ### Authentication & Authorization
 
-- Clerk for authentication and user management
-- Clerk Organizations for multi-tenant workspaces
-- Clerk Billing for subscription management (B2B)
-- Client-side RBAC for navigation visibility
+- Session auth against Keystone's GraphQL API (`authenticateUserWithPassword` /
+  `authenticatedItem` / `endSession` — Keystone's standard `createAuth` mutations)
+- Same users/sessions as Keystone Admin UI and the React Native app (which
+  bridges its own Bearer token to the same session cookie server-side)
+- Apollo Client: `registerApolloClient` (RSC, `src/lib/apollo/rsc-client.ts`)
+  + `ApolloNextAppProvider` (Client Components, `src/lib/apollo/browser-client.tsx`)
+- Client-side, role-based RBAC for navigation visibility (`src/hooks/use-nav.ts`)
 
 ### Data & APIs
 
@@ -153,7 +156,7 @@ The project follows a feature-based folder structure designed for scalability in
     └── themes/            # Individual theme files
 
 /docs                      # Documentation
-│   ├── clerk_setup.md     # Clerk configuration guide
+│   ├── keystone_auth.md   # Keystone auth setup guide
 │   ├── nav-rbac.md        # Navigation RBAC documentation
 │   └── themes.md          # Theme customization guide
 
@@ -204,17 +207,14 @@ bun run prepare      # Install Husky hooks
 
 Copy `env.example.txt` to `.env.local` and configure:
 
-### Required for Authentication (Clerk)
+### Required for Authentication (Keystone)
 
 ```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
-CLERK_SECRET_KEY=sk_...
+NEXT_PUBLIC_KEYSTONE_GRAPHQL_URL="http://localhost:3001/api/graphql"
 
-# Redirect URLs
-NEXT_PUBLIC_CLERK_SIGN_IN_URL="/auth/sign-in"
-NEXT_PUBLIC_CLERK_SIGN_UP_URL="/auth/sign-up"
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard/overview"
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/dashboard/overview"
+# Optional — see env.example.txt
+KEYSTONE_GRAPHQL_URL=
+KEYSTONE_SESSION_COOKIE_NAME=
 ```
 
 ### Optional for Error Tracking (Sentry)
@@ -226,8 +226,6 @@ NEXT_PUBLIC_SENTRY_PROJECT=your-project
 SENTRY_AUTH_TOKEN=sntrys_...
 NEXT_PUBLIC_SENTRY_DISABLED="false"  # Set to "true" to disable in dev
 ```
-
-**Note**: Clerk supports "keyless mode" — run `npx clerk@latest init` to provision a development instance in seconds (no account needed; keys are written to `.env.local`).
 
 ---
 
@@ -322,7 +320,7 @@ export const navGroups: NavGroup[] = [
         icon: 'dashboard',
         shortcut: ['d', 'd'],
         items: [],
-        access: { requireOrg: true } // RBAC check
+        access: { role: 'admin' } // RBAC check
       }
     ]
   }
@@ -331,54 +329,42 @@ export const navGroups: NavGroup[] = [
 
 ### Access Control Properties
 
-- `requireOrg: boolean` - Requires active organization
-- `permission: string` - Requires specific permission
-- `role: string` - Requires specific role
-- `plan: string` - Requires specific subscription plan
-- `feature: string` - Requires specific feature
+- `role: string` - Requires the signed-in user's Keystone `role` field to match
 
 ### Client-Side Filtering
 
-The `useFilteredNavItems()` hook in `src/hooks/use-nav.ts` filters navigation client-side using Clerk's `useOrganization()` and `useUser()` hooks. This is for UX only - actual security checks must happen server-side.
+The `useFilteredNavItems()` hook in `src/hooks/use-nav.ts` filters navigation client-side using `useSession()` (`src/features/auth/hooks/use-session.ts`), an Apollo `useQuery` of Keystone's `authenticatedItem`. This is for UX only - actual security checks must happen server-side, via Keystone's own `access/*` functions.
 
 ---
 
 ## Authentication Patterns
 
-### Protected Routes
+Session state comes straight from Keystone's GraphQL API — no separate identity provider. See `docs/keystone_auth.md` for the full setup, including how this matches the Bearer-token-to-cookie bridge the React Native app uses for the same Keystone sessions.
 
-Dashboard routes use Clerk's middleware pattern. Pages that require organization:
+### Protected Routes (Server Components)
 
 ```tsx
-import { auth } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
+import { getSession } from '@/features/auth/session';
 
 export default async function Page() {
-  const { orgId } = await auth();
-  if (!orgId) redirect('/dashboard/workspaces');
+  const session = await getSession();
+  if (!session) redirect('/auth/sign-in');
   // ...
 }
 ```
 
-### Plan/Feature Protection
-
-Use Clerk's `<Protect>` component for client-side:
+### Role-gated Content (Client Components)
 
 ```tsx
-import { Protect } from '@clerk/nextjs';
+'use client';
+import { useSession } from '@/features/auth/hooks/use-session';
 
-<Protect plan='pro' fallback={<UpgradePrompt />}>
-  <PremiumContent />
-</Protect>;
-```
-
-Use `has()` function for server-side checks:
-
-```tsx
-import { auth } from '@clerk/nextjs';
-
-const { has } = await auth();
-const hasFeature = has({ feature: 'premium_access' });
+function AdminOnlyPanel() {
+  const { user } = useSession();
+  if (user?.role !== 'admin') return null;
+  return <PremiumContent />;
+}
 ```
 
 ---
@@ -576,7 +562,7 @@ Both use `output: 'standalone'` in `next.config.ts`. Pass `NEXT_PUBLIC_*` vars a
 ### Build Considerations
 
 - Output: `standalone` (optimized for Docker/self-hosting)
-- Images: Configured for `api.slingacademy.com`, `img.clerk.com`, `clerk.com`
+- Images: Configured for `api.slingacademy.com`
 - Sentry source maps uploaded automatically in CI
 
 ---
@@ -590,7 +576,6 @@ A single `scripts/cleanup.js` file handles removal of optional features:
 node scripts/cleanup.js --interactive
 
 # Remove specific features
-node scripts/cleanup.js clerk           # Remove auth/org/billing
 node scripts/cleanup.js kanban          # Remove kanban board
 node scripts/cleanup.js chat            # Remove messaging UI
 node scripts/cleanup.js ai-chat         # Remove AI chat demo
@@ -609,6 +594,8 @@ node scripts/cleanup.js --list
 ```
 
 **Safety**: Script requires git repository with at least one commit. Use `--force` to skip.
+
+**Known gap**: `scripts/cleanup-templates/clerk/` is orphaned — it dates from when this starter used Clerk and hasn't been ported to the Keystone-based auth. Auth is no longer an optional feature to strip via this script; treat `scripts/cleanup.js` and `cleanup-templates/` as covering everything except auth until that's addressed.
 
 Replacement files live in `scripts/cleanup-templates/` as real `.ts`/`.tsx` files typechecked by `tsc` and `next build`, so template rot fails loudly instead of shipping broken code.
 

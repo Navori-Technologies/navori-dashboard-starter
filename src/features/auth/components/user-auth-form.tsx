@@ -1,68 +1,74 @@
 'use client';
-import { LoadingButton } from '@/components/ui/loading-button';
+
+import { useMutation } from '@apollo/client/react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import * as z from 'zod';
 import { FieldGroup } from '@/components/ui/field';
 import { useAppForm } from '@/lib/form';
-import { useTransition } from 'react';
-import { toast } from 'sonner';
-import * as z from 'zod';
-import GithubSignInButton from './github-auth-button';
+import {
+  LOGIN_MUTATION,
+  type LoginMutationData,
+  type LoginMutationVariables
+} from '@/graphql/auth';
 
 const formSchema = z.object({
-  email: z.string().email({ message: 'Enter a valid email address' })
+  email: z.string().email({ message: 'Enter a valid email address' }),
+  password: z.string().min(1, { message: 'Enter your password' })
 });
 
 export default function UserAuthForm() {
-  const [loading, startTransition] = useTransition();
+  const router = useRouter();
+  const [formError, setFormError] = useState<string | null>(null);
+  const [login] = useMutation<LoginMutationData, LoginMutationVariables>(LOGIN_MUTATION);
 
   const form = useAppForm({
     defaultValues: {
-      email: ''
+      email: '',
+      password: ''
     },
     validators: {
       onSubmit: formSchema
     },
-    onSubmit: () => {
-      startTransition(() => {
-        toast.success('Signed In Successfully!');
-      });
+    onSubmit: async ({ value }) => {
+      setFormError(null);
+      const { data } = await login({ variables: value });
+      const result = data?.authenticateUserWithPassword;
+
+      if (result?.['__typename'] === 'UserAuthenticationWithPasswordFailure') {
+        setFormError(result.message);
+        return;
+      }
+
+      router.push('/dashboard/overview');
+      router.refresh();
     }
   });
 
   return (
-    <>
-      <form
-        className='w-full space-y-2'
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit();
-        }}
-      >
-        <FieldGroup>
-          <form.AppField
-            name='email'
-            children={(field) => (
-              <field.TextField
-                label='Email'
-                type='email'
-                placeholder='Enter your email...'
-                disabled={loading}
-              />
-            )}
-          />
-        </FieldGroup>
-        <LoadingButton loading={loading} type='submit' className='mt-2 ml-auto w-full'>
-          Continue With Email
-        </LoadingButton>
-      </form>
-      <div className='relative'>
-        <div className='absolute inset-0 flex items-center'>
-          <span className='w-full border-t' />
-        </div>
-        <div className='relative flex justify-center text-xs uppercase'>
-          <span className='bg-background text-muted-foreground px-2'>Or continue with</span>
-        </div>
-      </div>
-      <GithubSignInButton />
-    </>
+    <form
+      className='w-full space-y-4'
+      onSubmit={(e) => {
+        e.preventDefault();
+        form.handleSubmit();
+      }}
+    >
+      <FieldGroup>
+        <form.AppField
+          name='email'
+          children={(field) => (
+            <field.TextField label='Email' type='email' placeholder='you@example.com' required />
+          )}
+        />
+        <form.AppField
+          name='password'
+          children={(field) => (
+            <field.TextField label='Password' type='password' placeholder='••••••••' required />
+          )}
+        />
+      </FieldGroup>
+      {formError && <p className='text-destructive text-sm'>{formError}</p>}
+      <form.SubmitButton className='w-full'>Sign in</form.SubmitButton>
+    </form>
   );
 }
