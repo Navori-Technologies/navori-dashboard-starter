@@ -64,7 +64,7 @@
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "5.7.2",
+    "typescript": "^7.0.2",
     "uuid": "^11.1.0",
     "vaul": "^1.1.2",
     "zod": "^4.3.6",
@@ -72,7 +72,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
-    "@types/node": "22.10.2",
+    "@types/node": "^24.13.4",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/sort-by": "^1.2.3",
@@ -93,5 +93,8 @@
     "!(scripts)/**/*.{js,jsx,tsx,ts,css,less,scss,sass}": [
       "oxfmt --write"
     ]
+  },
+  "engines": {
+    "node": ">=24.20.0"
   }
 }
