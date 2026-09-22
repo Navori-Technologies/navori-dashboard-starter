@@ -18,6 +18,7 @@
     "format:check": "oxfmt --check . '!**/*.md' '!**/*.mdc' '!**/*.mdx' '!**/*.yml' '!**/*.yaml'",
     "codegen": "graphql-codegen --config codegen.ts",
     "codegen:watch": "graphql-codegen --config codegen.ts --watch",
+    "cpd": "jscpd src",
     "prepare": "husky"
   },
   "dependencies": {
@@ -85,6 +86,7 @@
     "@types/uuid": "^11.0.0",
     "dotenv": "^17.4.2",
     "husky": "^9.1.7",
+    "jscpd": "^5.2.0",
     "lint-staged": "^17.5.1",
     "oxfmt": "^0.68.0",
     "oxlint": "^1.83.0",
