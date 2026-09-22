@@ -1,12 +1,13 @@
 'use client';
 
-import type { Column } from '@tanstack/react-table';
+import type { Column, RowData } from '@tanstack/react-table';
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import type { DataTableFeatures } from '@/lib/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -29,12 +30,15 @@ function getIsValidRange(value: unknown): value is RangeValue {
   );
 }
 
-interface DataTableSliderFilterProps<TData> {
-  column: Column<TData, unknown>;
+interface DataTableSliderFilterProps<TData extends RowData> {
+  column: Column<DataTableFeatures, TData, unknown>;
   title?: string;
 }
 
-export function DataTableSliderFilter<TData>({ column, title }: DataTableSliderFilterProps<TData>) {
+export function DataTableSliderFilter<TData extends RowData>({
+  column,
+  title
+}: DataTableSliderFilterProps<TData>) {
   const id = React.useId();
 
   const columnFilterValue = getIsValidRange(column.getFilterValue())

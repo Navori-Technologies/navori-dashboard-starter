@@ -1,6 +1,6 @@
 'use client';
 
-import type { Column } from '@tanstack/react-table';
+import type { Column, RowData } from '@tanstack/react-table';
 import { Icons } from '@/components/icons';
 import { DataTableFilterClear } from '@/components/ui/table/data-table-filter-clear';
 import * as React from 'react';
@@ -9,6 +9,7 @@ import type { DateRange } from 'react-day-picker';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import type { DataTableFeatures } from '@/lib/data-table';
 import { Separator } from '@/components/ui/separator';
 import { formatDate } from '@/lib/format';
 
@@ -46,13 +47,13 @@ function parseColumnFilterValue(value: unknown) {
   return [];
 }
 
-interface DataTableDateFilterProps<TData> {
-  column: Column<TData, unknown>;
+interface DataTableDateFilterProps<TData extends RowData> {
+  column: Column<DataTableFeatures, TData, unknown>;
   title?: string;
   multiple?: boolean;
 }
 
-export function DataTableDateFilter<TData>({
+export function DataTableDateFilter<TData extends RowData>({
   column,
   title,
   multiple

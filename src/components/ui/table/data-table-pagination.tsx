@@ -1,4 +1,4 @@
-import type { Table } from '@tanstack/react-table';
+import type { ReactTable, RowData } from '@tanstack/react-table';
 import { Icons } from '@/components/icons';
 
 import { Button } from '@/components/ui/button';
@@ -10,14 +10,15 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import type { DataTableFeatures } from '@/lib/data-table';
 import { cn } from '@/lib/utils';
 
-interface DataTablePaginationProps<TData> extends React.ComponentProps<'div'> {
-  table: Table<TData>;
+interface DataTablePaginationProps<TData extends RowData> extends React.ComponentProps<'div'> {
+  table: ReactTable<DataTableFeatures, TData>;
   pageSizeOptions?: number[];
 }
 
-export function DataTablePagination<TData>({
+export function DataTablePagination<TData extends RowData>({
   table,
   pageSizeOptions = [10, 20, 30, 40, 50],
   className,
@@ -45,13 +46,13 @@ export function DataTablePagination<TData>({
         <div className='hidden items-center space-x-2 sm:flex'>
           <p className='text-sm font-medium whitespace-nowrap'>Rows per page</p>
           <Select
-            value={`${table.getState().pagination.pageSize}`}
+            value={`${table.state.pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value));
             }}
           >
             <SelectTrigger className='h-8 w-[4.5rem] [&[data-size]]:h-8'>
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
+              <SelectValue placeholder={table.state.pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side='top'>
               <SelectGroup>
@@ -65,7 +66,7 @@ export function DataTablePagination<TData>({
           </Select>
         </div>
         <div className='flex items-center justify-center text-sm font-medium whitespace-nowrap'>
-          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          Page {table.state.pagination.pageIndex + 1} of {table.getPageCount()}
         </div>
         <div className='flex items-center space-x-1'>
           <Button

@@ -1,4 +1,4 @@
-import { type Table as TanstackTable, flexRender } from '@tanstack/react-table';
+import { type ReactTable, type RowData, flexRender } from '@tanstack/react-table';
 import type * as React from 'react';
 
 import { DataTablePagination } from '@/components/ui/table/data-table-pagination';
@@ -10,15 +10,19 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { getCommonPinningStyles } from '@/lib/data-table';
+import { type DataTableFeatures, getCommonPinningStyles } from '@/lib/data-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
-interface DataTableProps<TData> extends React.ComponentProps<'div'> {
-  table: TanstackTable<TData>;
+interface DataTableProps<TData extends RowData> extends React.ComponentProps<'div'> {
+  table: ReactTable<DataTableFeatures, TData>;
   actionBar?: React.ReactNode;
 }
 
-export function DataTable<TData>({ table, actionBar, children }: DataTableProps<TData>) {
+export function DataTable<TData extends RowData>({
+  table,
+  actionBar,
+  children
+}: DataTableProps<TData>) {
   return (
     <div className='flex flex-1 flex-col space-y-4'>
       {children}

@@ -3,12 +3,13 @@ import { Badge } from '@/components/ui/badge';
 import { DataTableColumnHeader } from '@/components/ui/table/data-table-column-header';
 import type { Product } from '../../api/types';
 import { Column, ColumnDef } from '@tanstack/react-table';
+import type { DataTableFeatures } from '@/lib/data-table';
 import { Icons } from '@/components/icons';
 import Image from 'next/image';
 import { CellAction } from './cell-action';
 import { CATEGORY_OPTIONS } from './options';
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<DataTableFeatures, Product>[] = [
   {
     accessorKey: 'photo_url',
     header: 'IMAGE',
@@ -29,7 +30,7 @@ export const columns: ColumnDef<Product>[] = [
   {
     id: 'name',
     accessorKey: 'name',
-    header: ({ column }: { column: Column<Product, unknown> }) => (
+    header: ({ column }: { column: Column<DataTableFeatures, Product, unknown> }) => (
       <DataTableColumnHeader column={column} title='Name' />
     ),
     cell: ({ cell }) => <div>{cell.getValue<Product['name']>()}</div>,
@@ -45,7 +46,7 @@ export const columns: ColumnDef<Product>[] = [
     id: 'category',
     accessorKey: 'category',
     enableSorting: false,
-    header: ({ column }: { column: Column<Product, unknown> }) => (
+    header: ({ column }: { column: Column<DataTableFeatures, Product, unknown> }) => (
       <DataTableColumnHeader column={column} title='Category' />
     ),
     cell: ({ cell }) => {
