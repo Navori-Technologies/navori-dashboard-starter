@@ -4,6 +4,8 @@ import { withSentryConfig } from '@sentry/nextjs';
 // Define the base Next.js configuration
 const baseConfig: NextConfig = {
   output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
+  // `next dev` would otherwise (re)generate AGENTS.md and CLAUDE.md at the repo root.
+  agentRules: false,
   experimental: {
     // TypeScript 7's native (Go) compiler doesn't expose the Program API
     // Next.js normally uses for its build-time type check — this routes

@@ -11,7 +11,6 @@ export const SESSION_QUERY = gql`
         id
         name
         email
-        role
       }
     }
   }
@@ -25,7 +24,6 @@ export const LOGIN_MUTATION = gql`
           id
           name
           email
-          role
         }
       }
       ... on UserAuthenticationWithPasswordFailure {
@@ -45,7 +43,8 @@ export interface SessionUser {
   id: string;
   name: string;
   email: string;
-  role: string;
+  /** Not queried until the backend's `User` list exposes a `role` field. */
+  role?: string;
 }
 
 export interface LoginMutationData {
