@@ -68,7 +68,9 @@ export default function UserAuthForm() {
         />
       </FieldGroup>
       {formError && <p className='text-destructive text-sm'>{formError}</p>}
-      <form.SubmitButton className='w-full'>Sign in</form.SubmitButton>
+      <form.AppForm>
+        <form.SubmitButton className='w-full'>Sign in</form.SubmitButton>
+      </form.AppForm>
     </form>
   );
 }
